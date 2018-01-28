@@ -7,7 +7,7 @@
     <div class="search__box">
       <i class="fas fa-search"></i>
       <input class="search__input" type="text" placeholder="Search movies">
-      <button @click="search">go</button>
+      <button class="btn" @click="search">Search</button>
     </div>
   </div>
 </template>
@@ -48,13 +48,9 @@ export default {
   color: rgb(var(--white));
   background: transparent;
   border: 0px;
-  padding: 1rem 2.5rem;
+  padding: 1rem 10rem;
   padding-left: .5rem;
   font-size: 1.5rem;
-}
-
-.search__input:before {
-  content: 'owo';
 }
 
 .search__input::placeholder {

@@ -1,7 +1,12 @@
 <template>
   <div class="movie" v-if="display">
     <div class="movie__card">
-      <img class="movie__poster" :src="movie.poster" />
+      <div class="movie__poster">
+        <div class="movie__poster--overlay">
+          <button class="btn">View</button>
+        </div>
+        <img class="movie__poster--image" :src="movie.poster" />
+      </div>
       <div class="movie__sub">
         <h3>{{ movie.title }}</h3>
         <h4>{{ movie.genres }}</h4>
@@ -74,13 +79,33 @@ export default {
 }
 
 .movie__poster {
-  min-width: 22rem;
-  max-height: 30rem;
+  overflow: hidden;
+  display: grid;
+  grid-template: 1 / 1;
   box-shadow: 0 1rem 3rem rgba(var(--grey), .6);
-  transition: all 0.3s;
 }
 
-.movie__poster:hover {
+.movie__poster--overlay {
+  grid-area: 1 / 1;
+  background: rgba(var(--pink), .5);
+  clip-path: polygon(0 0, 100% 100%, 100% 100%, 0 100%);
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transition: all 0.3s;
+  transform: translateY(100%);
+}
+
+.movie__poster--image {
+  grid-area: 1 / 1;
+  min-width: 22rem;
+  max-height: 30rem;
+}
+
+.movie__poster:hover .movie__poster--overlay {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: translateY(0%);
 }
 
 .movie__sub {

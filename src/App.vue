@@ -35,6 +35,15 @@ body {
   font-size: 1.6rem;
 }
 
+.btn {
+  padding: .5rem 3rem;
+  background: rgb(var(--white));
+  color: rgb(var(--pink));
+  border-radius: 5px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+}
 
 #app {
   -webkit-font-smoothing: antialiased;

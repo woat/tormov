@@ -3,6 +3,7 @@
     <Search class="search" v-on:testemit="test"/>
     <Navi class="navi"/>
     <div class="movies">
+      <Overlay />
       <h1 class="movies__headline">New Releases</h1>
       <Movie v-for="movie in movielist" :search="movie.title" />
     </div>
@@ -14,10 +15,11 @@ import yts from '@/api/yts'
 import Movie from '@/components/Movie'
 import Search from '@/components/Search'
 import Navi from '@/components/Navi'
+import Overlay from '@/components/Overlay'
 
 export default {
   name: 'Home',
-  components: { Movie, Search, Navi },
+  components: { Movie, Search, Navi, Overlay },
   data() {
     return {
       movie: [],
@@ -71,6 +73,8 @@ export default {
 
   overflow-y: auto;
   overflow-x: hidden;
+
+  position: relative;
 }
 
 .movies__headline {
