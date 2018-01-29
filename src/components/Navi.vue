@@ -1,18 +1,31 @@
 <template>
   <div class="navi">
     <ul>
-      <li class="navi__item">New Releases</li>
-      <li class="navi__item">Trending</li>
-      <li class="navi__item">Coming Soon</li>
-      <li class="navi__item">Favourites</li>
-      <li class="navi__item">Watch Later</li>
+      <li @click="active" class="navi__item navi__item--active">New Releases</li>
+      <li @click="active" class="navi__item">Trending</li>
+      <li @click="active" class="navi__item">Coming Soon</li>
+      <li @click="active" class="navi__item">Favourites</li>
+      <li @click="active" class="navi__item">Watch Later</li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Navi'
+  name: 'Navi',
+  methods: {
+    removeActives(e) {
+      return [...e.target.parentNode.childNodes]
+        .filter(node => node.nodeName !== '#text')
+        .forEach(node => node.classList.remove('navi__item--active'))
+    },
+    active(e) {
+      this.removeActives(e)
+      e.target.classList.toggle('navi__item--active')
+      const params = e.target.innerHTML
+      this.$router.push({ query: { view: params } })
+    }
+  }
 }
 </script>
 
@@ -32,6 +45,7 @@ export default {
   text-align: start;
   font-weight: 400;
   color: rgb(var(--white));
+  cursor: pointer;
 }
 
 .navi__item:hover {
@@ -39,10 +53,26 @@ export default {
   color: rgb(var(--grey));
 }
 
+.navi__item--active {
+  background-color: rgb(var(--white));
+  color: rgb(var(--grey));
+}
+
+/*
+
+Add arrow later?
+
 .navi__item:hover::after {
   content: '\27a1';
-  margin-bottom: 4rem;
   text-align: right;
   float: right;
 }
+
+.navi__item--active::after {
+  content: '\27a1';
+  text-align: right;
+  float: right;
+}
+
+*/
 </style>

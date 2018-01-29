@@ -13,10 +13,10 @@ export default {
 <style>
 :root {
   --white: 246,246,246;
-  --grey: 85,98,112;
-  --blue: 78,205,196;
+  --grey: 25, 28, 31;
+  --blue: 99, 181, 236;
   --green: 199,244,100;
-  --pink: 255,107,107;
+  --pink: 255, 66, 79;
   --red: 196,77,88;
 }
 
@@ -33,16 +33,6 @@ html {
 
 body {
   font-size: 1.6rem;
-}
-
-.btn {
-  padding: .5rem 3rem;
-  background: rgb(var(--white));
-  color: rgb(var(--pink));
-  border-radius: 5px;
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-block;
 }
 
 #app {

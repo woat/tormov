@@ -6,7 +6,7 @@
     </div>
     <div class="search__box">
       <i class="fas fa-search"></i>
-      <input class="search__input" type="text" placeholder="Search movies">
+      <input class="search__input" v-model="searchQuery" type="text" placeholder="Search movies">
       <button class="btn" @click="search">Search</button>
     </div>
   </div>
@@ -17,12 +17,20 @@ export default {
   name: 'Search',
   data() {
     return {
-
+      searchQuery: ''
+    }
+  },
+  watch: {
+    $route: function route(to) {
+      if (!to.query.search) return false
+      this.searchQuery = to.query.search
+      this.search()
     }
   },
   methods: {
     search() {
-      this.$emit('testemit', 'god')
+      this.$emit('sendSearch', this.searchQuery)
+      this.$router.push({ query: { search: this.searchQuery } })
     }
   }
 }
@@ -61,6 +69,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  cursor: default;
 }
 
 h1 {
