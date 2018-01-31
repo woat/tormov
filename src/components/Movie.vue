@@ -32,7 +32,7 @@ export default {
   methods: {
     async searchMovie() {
       try {
-        await imdb.get(this.search, {apiKey: '3dea6a74'})
+        await imdb.get(this.search, {apiKey: process.env.API_KEY })
           .then(data => {
             this.movie = data
           })
@@ -42,6 +42,7 @@ export default {
         }
         const torrent = await yts.search(this.movie.imdbid)
         this.movie.torrenturl = torrent.data.data.movies[0].torrents[0].url
+        this.movie.yt = `https://www.youtube.com/watch?v=${torrent.data.data.movies[0].yt_trailer_code}`
       } catch(err) {
         this.display = false
         console.log(err)

@@ -21,7 +21,7 @@ export default {
     }
   },
   watch: {
-    $route: function route(to) {
+    '$route'(to) {
       if (!to.query.search) return false
       this.searchQuery = to.query.search
       this.search()

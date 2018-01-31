@@ -14,7 +14,16 @@
             {{ rating.Source }}: <span class="movie__link">{{ rating.Value }}</span>
           </li>
         </ul>
-        <a class="movie__torrent" v-if="movie.torrenturl" :href="movie.torrenturl">Download (YIFY)</a>
+        <div class="movie__buttons">
+          <a v-if="movie.torrenturl" :href="movie.torrenturl">
+            <button class="btn btn--blue">
+              Download (YIFY)
+            </button>
+          </a>
+          <a v-if="movie.yt":href="movie.yt">
+            <button class="btn btn--blue">Watch Trailer</button>
+          </a>
+        </div>
       </div>
     </div>
   </div>
@@ -36,7 +45,7 @@ export default {
     close() {
       this.$emit('active', false)
     }
-  }
+  },
 }
 </script>
 
@@ -114,19 +123,17 @@ export default {
   color: rgb(var(--blue));
 }
 
-.movie__torrent {
-  padding: 1rem 2.5rem;
-  border-radius: 10px;
-  text-decoration: none;
-  background-color: rgb(var(--red));
-  color: rgb(var(--white));
-  transition: all 0.3s ease;
+.movie__buttons {
+  display: flex;
 }
 
-.movie__torrent:hover {
-  transform: translateY(-.2rem);
-  box-shadow: 0 1rem 3rem rgba(0,0,0, .3);
-  background-color: rgb(var(--blue));
+.movie__buttons > *:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.btn {
+  font-size: 1.5rem;
+  padding: 1rem 2.5rem;
 }
 
 .movie__close {
