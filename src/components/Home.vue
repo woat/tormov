@@ -19,13 +19,14 @@ import Movie from '@/components/Movie'
 import Search from '@/components/Search'
 import Navi from '@/components/Navi'
 import Overlay from '@/components/Overlay'
+import h from '@/modules/helpers'
 
 export default {
   name: 'Home',
   components: { Movie, Search, Navi, Overlay },
   data() {
     return {
-      movie: [],
+      // movie: [],
       movieList: [],
       movieRec: [],
       movieData: {},
@@ -54,6 +55,19 @@ export default {
     },
     async addMoreMovies() {
       this.loading = true
+
+      // Genres
+      if (this.$route.query.genre) {
+        const genresList = this.$route.query.genre.split(' ')
+        const movies = await h.getMoviesByGenre(genresList, yts, 'searchByGenre')
+        movies.forEach(movie => this.movieList.push(movie))
+        console.log(movies)
+        return this.loading = false
+      }
+
+      console.log('error')
+
+      // Default
       const list = await yts.list().then(data => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -62,7 +76,7 @@ export default {
           }, 1500)
         })
       })
-    
+
       if (this.movieRec.length) {
         // TODO This needs to be movie reccomendation instead of random ones
         return list.data.data.movies.forEach(movie => this.movieRec.push(movie))

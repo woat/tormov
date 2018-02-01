@@ -3,7 +3,12 @@
     <ul>
       <li @click="dropdown" class="navi__item navi__item--genres">Genres<i class="fas fa-chevron-down" data-fa-transform="down-2"></i></li>
       <ul class="navi__dropdown">
-        <li @click="activeGenre" v-for="genre in genres" class="navi__item">{{ genre }}</li>
+        <li @click="clearSelections" class="navi__item navi__item--cs">Clear Selections</li>  
+        <div v-for="genre in genres">
+          <input class="navi__checkbox" type="checkbox" :value="genre" :id="genre" v-model="filterGenres">
+          <label :for="genre" @click="activeGenre" class="navi__item navi__item--label">{{ genre }}</label>  
+          <!-- <li @click="activeGenre" v-for="genre in genres" class="navi__item">{{ genre }}</li> -->
+        </div>
       </ul>
       <li @click="activeView" class="navi__item navi__item--active">New Releases</li>
       <li @click="activeView" class="navi__item">Trending</li>
@@ -15,11 +20,13 @@
 </template>
 
 <script>
+import h from '@/modules/helpers'
+
 export default {
   name: 'Navi',
   data() {
     return {
-      filterGenres: ['Crime', 'Comedy', 'Action'],
+      filterGenres: [],
       genres: [
         'Action',
         'Adventure',
@@ -61,13 +68,7 @@ export default {
       const params = e.target.innerHTML
       this.$router.push({ query: { view: params } })
     },
-    setGenre(e) {
-      const params = e.target.innerHTML
-      if (this.$route.query.genre) {
-        const prev = this.$route.query.genre
-        console.log(prev)
-        return this.$router.push({ query: { genre: `${prev} ${params}` } })
-      }
+    setGenre(params) {
       this.$router.push({ query: { genre: params } })
     },
     activeView(e) {
@@ -75,16 +76,30 @@ export default {
       this.setQuery(e)
     },
     activeGenre(e) {
+      // This is needed for when you click the same genre
       this.active(e)
-      this.setGenre(e)
+    },
+    clearSelections(e) {
+      this.filterGenres = []
+
+      // Remove Actives
+      ;[...e.target.parentNode.childNodes]
+        .filter(node => node.nodeName === 'DIV')
+        .map(node => node.childNodes[2])
+        .forEach(node => node.classList.remove('navi__item--active'))
+      
+      // TODO Clear query
+      this.$router.replace('/')
     },
     dropdown(e) {
       this.active(e)
-      console.log(document.querySelector('.navi__dropdown'))
       document.querySelector('.navi__dropdown').classList.toggle('navi__dropdown--active')
     }
   },
   watch: {
+    filterGenres() {
+      this.setGenre(this.filterGenres.join(' '))
+    },
     '$route'({ query: { view, genre } }) {
       const vm = this;
       const views = {
@@ -121,43 +136,11 @@ export default {
             that.loading = true;
             that.resetList()
 
+
             if (genre.split(' ').length > 1) {
               const genresList = genre.split(' ')
-
-              // Generate array promises
-              const genresPromises = genresList.map(g => {
-                return api.searchByGenre(g)
-              })
-
-              // Put the array into a Promise.All()
-              const genresData = await Promise.all(genresPromises)
-
-              // An array of arrays of movies
-              const arrayOfMovies = genresData.map(e => e.data.data.movies)
-
-              // Flatten the movies and store in allMovies
-              const allMovies = []
-              arrayOfMovies.forEach(arr => {
-                arr.forEach(movie => {
-                  // Check for duplicates before pushing
-                  if (!allMovies.some(someMov => someMov.id === movie.id)) {
-                    allMovies.push(movie)
-                  }
-                })
-              })
-
-              // Filter the movies & Finally set to movieList
-              that.movieList = allMovies.filter(movie => {
-                let count = 0
-                return movie.genres.some(g => {
-                  genresList.forEach(f => {
-                    if (f === g) count += 1
-                    console.log(count)
-                  })
-                  return count === genresList.length
-                })
-              })
-
+              const movies = await h.getMoviesByGenre(genresList, api, 'searchByGenre')
+              that.movieList = movies
               return that.loading = false
             }
 
@@ -207,6 +190,14 @@ export default {
   justify-content: space-between;
 }
 
+.navi__item--cs {
+  margin-top: 0 !important;
+}
+
+.navi__item--cs:hover {
+  background-color: rgb(var(--blue));
+}
+
 .fa-chevron-down {
   transition: all .2s;
 }
@@ -223,19 +214,40 @@ export default {
   transition: all 0.2s;
 }
 
-.navi__dropdown > * {
+.navi__dropdown > div > input {
+  display: none;
+}
+
+.navi__dropdown > div > label {
+  display: block;
+}
+
+.navi__dropdown > div > * {
   margin-top: 0 !important;
   padding: 1rem 6rem;
 }
 
-.navi__dropdown > *:hover {
+.navi__dropdown > div > *:hover {
   color: rgb(var(--white));
   background-color: rgb(var(--pink));
 }
 
-.navi__dropdown > .navi__item--active {
+.navi__dropdown > div > .navi__item--active {
   color: rgb(var(--white));
   background-color: rgb(var(--pink));
+  position: relative;
+}
+
+.navi__dropdown > div > .navi__item--active:before {
+  position: absolute;
+  display: inline-block;
+  top: 0;
+  left: -5px;
+  content: '';
+  width: 1rem;
+  height: 100%;
+  color: rgb(var(--white));
+  background-color: rgb(var(--blue));
 }
 
 .navi__dropdown--active {
