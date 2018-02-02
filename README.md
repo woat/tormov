@@ -1,21 +1,8 @@
-# vue
+# Tormov
 
-> A Vue.js project
+A movie viewer with direct links to torrents.
 
-## Build Setup
+![home](https://i.imgur.com/IMopUjg.png)
+![overlay](https://i.imgur.com/Y6xF10N.png)
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## [View Live](https://woat.github.io/tormov)
