@@ -1,3 +1,9 @@
+function noDuplicatesPush(list, target) {
+  return list.forEach(element => {
+    if (!target.some(item => item === element)) target.push(element)
+  })
+}
+
 function generatePromises(list, api, method, page) {
   return list.map(e => api[method](e, page))
 }
@@ -29,14 +35,6 @@ function filterMovies(list, genresList) {
   })
 }
 
-// put the api call into movies
-async function getAtLeast(num, movies) {
-  while (movies.length < num) {
-    const more = await api()
-    more.forEach(movie => movies.push(movie))
-  }
-}
-
 async function getMoviesByGenre(genres, api, method, page) {
   const promises = generatePromises(genres, api, method, page)
   const data = await Promise.all(promises)
@@ -56,5 +54,5 @@ function* number() {
 module.exports = {
   number,
   getMoviesByGenre,
-  getAtLeast
+  noDuplicatesPush
 }

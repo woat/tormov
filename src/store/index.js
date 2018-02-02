@@ -5,11 +5,14 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    genrePage: 8
+    genrePage: 2
   },
   mutations: {
     increment(state) {
       state.genrePage++
+    },
+    reset(state) {
+      state.genrePage = 2
     }
   }
 })

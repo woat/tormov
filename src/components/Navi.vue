@@ -142,9 +142,8 @@ export default {
               const movies = await h.getMoviesByGenre(genresList, api, 'searchByGenre')
 
               while (movies.length < 20) {
-                console.log(that.$store.state.genrePage)
                 const more = await h.getMoviesByGenre(genresList, api, 'searchByGenre', that.$store.state.genrePage)
-                more.forEach(movie => movies.push(movie))
+                h.noDuplicatesPush(more, movies)
                 that.$store.commit('increment')
               }
 
