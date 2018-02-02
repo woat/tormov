@@ -60,12 +60,17 @@ export default {
       if (this.$route.query.genre) {
         const genresList = this.$route.query.genre.split(' ')
         const movies = await h.getMoviesByGenre(genresList, yts, 'searchByGenre')
+
+        while (movies.length < 20) {
+          const more = await h.getMoviesByGenre(genresList, yts, 'searchByGenre', this.$store.state.genrePage)
+          more.forEach(movie => movies.push(movie))
+          console.log(this.$store.state.genrePage)
+          this.$store.commit('increment')
+        }
+
         movies.forEach(movie => this.movieList.push(movie))
-        console.log(movies)
         return this.loading = false
       }
-
-      console.log('error')
 
       // Default
       const list = await yts.list().then(data => {
@@ -89,7 +94,6 @@ export default {
       const list = await yts.search(query)
       this.movieList = list.data.data.movies
 
-      console.log(typeof this.movieList)
       if (typeof this.movieList === 'undefined') {
         return this.headline = `No results found for '${query}'`
       }
